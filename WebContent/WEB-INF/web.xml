@@ -5,19 +5,19 @@
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
   <context-param>
-  	<param-name>DBIP</param-name>
-  	<param-value>127.0.0.1</param-value>
+    <param-name>DBIP</param-name>
+    <param-value>127.0.0.1</param-value>
   </context-param>
   <context-param>
-  	<param-name>DBUser</param-name>
-  	<param-value>root</param-value>
+    <param-name>DBUser</param-name>
+    <param-value>root</param-value>
   </context-param>
   <context-param>
-  	<param-name>DBPassword</param-name>
-  	<param-value>root</param-value>
+    <param-name>DBPassword</param-name>
+    <param-value>root</param-value>
   </context-param>
   <context-param>
-  	<param-name>DBName</param-name>
-  	<param-value>restaurantmanager</param-value>
+    <param-name>DBName</param-name>
+    <param-value>restaurantmanager</param-value>
   </context-param>
 </web-app>

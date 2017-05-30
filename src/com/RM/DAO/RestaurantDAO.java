@@ -21,6 +21,37 @@ public class RestaurantDAO extends DAO
 		m_restaurant = null;
 	}
 	
+	public boolean Select()
+	{
+		String sql = "SELECT * FROM restaurant WHERE restNumber = ? LIMIT 1";
+		PreparedStatement preState = null;
+		ResultSet rs = null;
+		boolean isSuccess = false;
+		try
+		{
+			preState = m_con.prepareStatement(sql);
+			preState.setString(1, m_restaurant.getAccount());
+			rs = preState.executeQuery();
+			isSuccess = rs.first();
+			if(isSuccess)
+			{
+				m_restaurant.setName(rs.getString("restName"));
+				m_restaurant.setPosition(rs.getString("restPosition"));
+				m_restaurant.setIntroduction(rs.getString("restIntroduction"));
+				m_restaurant.setDeliveryCost(rs.getFloat("restDeliveryCost"));
+				m_restaurant.setImgPath(rs.getString("restImgPath"));
+			}
+		} 
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			isSuccess = false;
+		}
+		CloseResultSet(rs);
+		ClosePreStatement(preState);
+		return isSuccess;
+	}
+	
 	public boolean ExistRestaurant()
 	{
 		String sql = "SELECT * FROM restaurant WHERE restNumber = ? AND restPassword = ? LIMIT 1";

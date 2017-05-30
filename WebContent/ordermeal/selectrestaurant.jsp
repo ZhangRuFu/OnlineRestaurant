@@ -52,7 +52,7 @@
 						<div style="padding-top:5px">月售100单</div>
 						<div style="padding-top:5px">配送费:¥<%=r.getDeliveryCost() %></div>
 					</div>
-					<a class="btn btn-info" style="float: right;" href="index.jsp">进入餐厅</a>
+					<a class="btn btn-info" style="float: right;" href="restaurant.jsp?restNum=<%=r.getAccount() %>">进入餐厅</a>
 				</div>
 			</div>
 			<%

@@ -58,12 +58,12 @@ public class LoginControl extends HttpServlet
 		String dispathUrl;
 		if(user != null)
 		{
-			dispathUrl = "/index.jsp";
+			dispathUrl = "index.jsp";
 			request.getSession().setAttribute("User", user);
 		}
 		else
-			dispathUrl = "/login.html";
-		request.getRequestDispatcher(dispathUrl).forward(request, response);
+			dispathUrl = "login.html";
+		response.sendRedirect(dispathUrl);
 	}
 	
 	private Student StudentLogin(String account, String password)
