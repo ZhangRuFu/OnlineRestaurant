@@ -14,6 +14,25 @@
 		<script type="text/javascript">
 			var totalPrice;
 			
+			function checkItem(checkbox)
+			{
+				var checked = checkbox.checked;
+				var foodID = checkbox.parentNode.parentNode.getElementsByTagName("input")[1].value;
+				var ajaxRequest = new XMLHttpRequest();
+				ajaxRequest.onreadystatechange = function()
+				{
+					if(ajaxRequest.readyState==4 && ajaxRequest.status==200)
+					{
+						var price = parseFloat(ajaxRequest.responseText);
+						totalPrice.innerHTML = checked ? (parseFloat(totalPrice.innerHTML) + price).toFixed(1) : (parseFloat(totalPrice.innerHTML) - price).toFixed(1);
+					}
+				}
+				ajaxRequest.open("POST", "<%=request.getContextPath() %>/PurchaseCartControl");
+				ajaxRequest.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
+				var data = "operation=check&foodID=" + foodID;
+				ajaxRequest.send(data);
+			}
+			
 			function modifyCount(count,foodID,itemPrice)
 			{
 				var ajaxRequest = new XMLHttpRequest();
@@ -23,6 +42,8 @@
 					{
 						var price = ajaxRequest.responseText.split(',');
 						itemPrice.innerHTML = price[0];
+						if(parseFloat(price[0]) == 0)
+							$(itemPrice.parentNode).fadeOut("fast", null);
 						totalPrice.innerHTML = price[1];
 					}
 				};
@@ -75,7 +96,8 @@
 					input.value = 0;
 				else
 					input.value--;
-				//ModifyCount(input.value, foodID);
+				itemPrice = button.parentNode.parentNode.parentNode.nextSibling.nextSibling;
+				modifyCount(input.value, foodID, itemPrice);
 			}
 		</script>
 		<style>
@@ -109,11 +131,12 @@
 	LinkedList<OrderItem> items = purchaseCart.GetItems();
 	%>
 	<div class="container" style="margin-top:20px;">
+	<form action="<%=request.getContextPath() %>/OrderControl" method="POST">
 		<div style="background-color:#fff;border:1px solid #e6e6e6;">
 			<table class="table itable table-hover">
 				<thead style="font-family:Youyuan;font-size:16px">
 					<tr>
-						<th style="width:1px;white-space: nowrap;padding-left: 15px;padding-right: 15px;">全选</th>
+						<th></th>
 						<th>商品</th>
 						<th>所属餐厅</th>
 						<th>单价</th>
@@ -133,7 +156,7 @@
 					restDAO.Select();
 				%>
 					<tr>
-						<td style="text-align:center"><input type="checkbox"></td>
+						<td style="text-align:center"><input checked="true" onclick="checkItem(this)" type="checkbox" name="foods" value="<%=food.getFoodID() %>"></td>
 						<td>
 							<img class="img-circle" style="width:50px;height:50px" src="<%=request.getContextPath() %>/images/food/<%=food.getFoodImgPath() %>"/>
 							<span style="font-size:18px"><%=food.getFoodName() %></span>
@@ -144,7 +167,7 @@
 							<input id="foodID" type="hidden" value="<%=food.getFoodID() %>"/>
 							<div class="input-group input-group-sm" style="width:90px">
 								<span class="input-group-btn"><button class="btn btn-default" onclick="minusItem(this)">-</button></span>
-								<input id="foodCount" type="text" style="text-align:center;" class="form-control" value="<%=item.getCount() %>"/>
+								<input id="foodCount" type="text" style="text-align:center;" class="form-control" value="<%=item.getCount() %>"  name="foodCount"/>
 								<span class="input-group-btn"><button class="btn btn-default" onclick="addItem(this)">+</button></span>
 							</div>
 						</td>
@@ -164,9 +187,10 @@
 					</span>
 				</div>
 				<div class="col-md-2">
-					<button class="btn btn-danger" style="width:100%;">去结算</button>
+					<input type="submit" class="btn btn-danger" style="width:100%;" value="去结算">
 				</div>
 			</div>
+			</form>
 	</div>
 	<!-- Content -->
 	

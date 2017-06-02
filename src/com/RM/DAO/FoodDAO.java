@@ -57,6 +57,11 @@ public class FoodDAO extends DAO
 		return foods;
 	}
 
+	public void setFood(Food food)
+	{
+		m_food = food;
+	}
+	
 	public boolean Select()
 	{
 		String sql = "SELECT * FROM food WHERE foodID = ? ";

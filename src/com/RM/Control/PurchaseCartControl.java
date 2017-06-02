@@ -52,42 +52,63 @@ public class PurchaseCartControl extends HttpServlet {
 		if(operation.equals("add"))
 			AddItem(request, cart);
 		else if(operation.equals("delete"))
-			if(DeleteItem(request,cart))
-				response.getWriter().write(String.valueOf(cart.GetTotalPrice()));
-			else
-				response.getWriter().write("Error");
+			response.getWriter().write(DeleteItem(request, cart));
 		else if(operation.equals("modify"))
-			if(ModifyItemCount(request, cart))
-				response.getWriter().write(String.valueOf(cart.GetItem(request.getParameter("foodID")).GetPrice()) + "," + String.valueOf(cart.GetTotalPrice()));
-			else
-				response.getWriter().write("Error");
+			response.getWriter().write(ModifyItemCount(request, cart));
+		else if(operation.equals("check"))
+			response.getWriter().write(CheckItem(request, cart));
 	}
 	
 	private void AddItem(HttpServletRequest request, PurchaseCart cart)
 	{
 		String foodID = request.getParameter("foodID");
-		String foodCount =request.getParameter("foodCount");
+		int foodCount = Integer.parseInt(request.getParameter("foodCount"));
+		if(foodCount == 0)
+			return;
 		Food food = new Food();
 		food.setFoodID(foodID);
 		FoodDAO foodDAO = new FoodDAO(food);
 		foodDAO.Select();
-		cart.AddItem(new OrderItem(food, Integer.parseInt(foodCount)));
+		cart.AddItem(new OrderItem(food, foodCount));
 	}
 	
-	private boolean DeleteItem(HttpServletRequest request, PurchaseCart cart)
+	private String DeleteItem(HttpServletRequest request, PurchaseCart cart)
 	{
 		String foodID = request.getParameter("foodID");
 		Food food = new Food();
 		food.setFoodID(foodID);
-		return cart.DeleteItem(new OrderItem(food, 1));
+		String responseText = null;
+		if(cart.DeleteItem(new OrderItem(food, 1)))
+			responseText = String.valueOf(cart.GetTotalPrice());
+		else
+			responseText = "Error";
+		return responseText;
 	}
 	
-	private boolean ModifyItemCount(HttpServletRequest request, PurchaseCart cart)
+	private String ModifyItemCount(HttpServletRequest request, PurchaseCart cart)
 	{
 		String foodID = request.getParameter("foodID");
-		String itemCount = request.getParameter("itemCount");
+		int itemCount = Integer.parseInt(request.getParameter("itemCount"));
 		Food food = new Food();
 		food.setFoodID(foodID);
-		return cart.ModifyItemCount(new OrderItem(food, Integer.parseInt(itemCount)));
+		String responseText = null;
+		if(cart.ModifyItemCount(new OrderItem(food, itemCount)))
+			if(itemCount != 0)
+				responseText = String.valueOf(cart.GetItem(request.getParameter("foodID")).GetPrice()) + "," + String.valueOf(cart.GetTotalPrice());
+			else
+				responseText = "0.0," + String.valueOf(cart.GetTotalPrice());
+		else
+			responseText = "Error";
+		return responseText;
+	}
+	
+	private String CheckItem(HttpServletRequest request, PurchaseCart cart)
+	{
+		String foodID = request.getParameter("foodID");
+		OrderItem item = cart.GetItem(foodID);
+		if(item == null)
+			return "Error";
+		return String.valueOf(item.GetPrice());
+			
 	}
 }
