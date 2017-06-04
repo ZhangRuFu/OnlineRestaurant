@@ -1,111 +1,75 @@
 package com.RM.Model;
 
-import java.util.LinkedList;
-
-import com.RM.DAO.RestaurantDAO;
-
-class RestaurantOrder
-{
-	private LinkedList<OrderItem> m_items = new LinkedList<OrderItem>();
-	private String m_restNumber;
-	private float m_sum;
-	
-	public RestaurantOrder(String restNumber)
-	{
-		m_restNumber = restNumber;
-	}
-	
-	public void AddItem(OrderItem item)
-	{
-		m_sum += item.GetPrice();
-		m_items.add(item);
-	}
-	
-	public float GetTotalPrice()
-	{
-		return m_sum;
-	}
-	
-	public String GetRestNumber()
-	{
-		return m_restNumber;
-	}
-	
-	public OrderItem GetOrderItem(int index)
-	{
-		return m_items.get(index);
-	}
-	
-	public int GetOrderItemCount()
-	{
-		return m_items.size();
-	}
-}
+import java.util.Date;
 
 public class Order
 {
-	private LinkedList<RestaurantOrder> m_restOrders = new LinkedList<RestaurantOrder>();
+	int m_orderID;
+	Date m_orderCreateTime;
+	Date m_CompleteTime;
+	int m_orderStatus;
+	float m_orderPrice;
+	String m_stuNumber;
+	String m_restNumber;
 	
-	public void AddItem(OrderItem item)
+	static public final int WAIT_TO_DISPOSE = 1;
+	static public final int WAIT_TO_TAKEOUT = 2;
+	static public final int FINISHED = 3;
+	
+	public int getOrderID()
 	{
-		for(RestaurantOrder restOrder : m_restOrders)
-			if(restOrder.GetRestNumber().equals(item.getFood().getRestNumber()))
-			{
-				restOrder.AddItem(item);
-				return;
-			}
-		
-		RestaurantOrder restOrder = new RestaurantOrder(item.getFood().getRestNumber());
-		restOrder.AddItem(item);
-		m_restOrders.add(restOrder);
-		return;
+		return m_orderID;
 	}
-	
-	public int GetRestCount()
+	public void setOrderID(int orderID)
 	{
-		return m_restOrders.size();
+		this.m_orderID = orderID;
 	}
-	
-	public int GetOrderItemCount(int index)
+	public Date getOrderCreateTime()
 	{
-		return m_restOrders.get(index).GetOrderItemCount();
+		return m_orderCreateTime;
 	}
-	
-	public String GetRestName(int index)
+	public void setOrderCreateTime(Date orderCreateTime)
 	{
-		String restNumber = m_restOrders.get(index).GetRestNumber();
-		Restaurant rest = new Restaurant();
-		rest.setAccount(restNumber);
-		RestaurantDAO restDAO = new RestaurantDAO(rest);
-		restDAO.Select();
-		return rest.getName();
+		this.m_orderCreateTime = orderCreateTime;
 	}
-	
-	public OrderItem GetOrderItem(int restIndex, int itemIndex)
+	public Date getCompleteTime()
 	{
-		return m_restOrders.get(restIndex).GetOrderItem(itemIndex);
+		return m_CompleteTime;
 	}
-	
-	public float GetRestDeliveryCost(int index)
+	public void setCompleteTime(Date completeTime)
 	{
-		String restNumber = m_restOrders.get(index).GetRestNumber();
-		Restaurant rest = new Restaurant();
-		rest.setAccount(restNumber);
-		RestaurantDAO restDAO = new RestaurantDAO(rest);
-		restDAO.Select();
-		return rest.getDeliveryCost();
+		m_CompleteTime = completeTime;
 	}
-	
-	public float GetRestPrice(int index)
+	public int getOrderStatus()
 	{
-		return m_restOrders.get(index).GetTotalPrice();
+		return m_orderStatus;
 	}
-	
-	public float GetTotalPrice()
+	public void setOrderStatus(int orderStatus)
 	{
-		float sum = 0;
-		for(RestaurantOrder restOrder : m_restOrders)
-			sum += restOrder.GetTotalPrice();
-		return sum;
+		this.m_orderStatus = orderStatus;
+	}
+	public float getOrderPrice()
+	{
+		return m_orderPrice;
+	}
+	public void setOrderPrice(float orderPrice)
+	{
+		this.m_orderPrice = orderPrice;
+	}
+	public String getStuNumber()
+	{
+		return m_stuNumber;
+	}
+	public void setStuNumber(String stuNumber)
+	{
+		this.m_stuNumber = stuNumber;
+	}
+	public String getRestNumber()
+	{
+		return m_restNumber;
+	}
+	public void setRestNumber(String restNumber)
+	{
+		this.m_restNumber = restNumber;
 	}
 }

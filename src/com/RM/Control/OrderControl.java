@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.RM.DAO.FoodDAO;
 import com.RM.Model.Food;
-import com.RM.Model.Order;
+import com.RM.Model.OrderManager;
 import com.RM.Model.OrderItem;
 
 /**
@@ -44,7 +44,7 @@ public class OrderControl extends HttpServlet {
 		String[] foodids = request.getParameterValues("foods");
 		String[] foodcount = request.getParameterValues("foodCount");
 		FoodDAO foodDAO = new FoodDAO();
-		Order order = new Order();
+		OrderManager order = new OrderManager();
 		for(int i = 0; i < foodids.length; i++)
 		{
 			String foodID = foodids[i];

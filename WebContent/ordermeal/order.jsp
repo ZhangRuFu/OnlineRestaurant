@@ -1,6 +1,6 @@
 <%@page import="com.RM.Model.Food"%>
 <%@page import="com.RM.Model.OrderItem"%>
-<%@page import="com.RM.Model.Order"%>
+<%@page import="com.RM.Model.OrderManager"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <!DOCTYPE HTML>
@@ -53,7 +53,7 @@
 			</div>
 	<!-- SubOrder -->
 	<%
-	Order order = (Order)session.getAttribute("Order");
+	OrderManager order = (OrderManager)session.getAttribute("Order");
 	int restCount = order.GetRestCount();
 	for(int i = 0; i < restCount; i++)
 	{
@@ -144,7 +144,7 @@
 			</div>
 			<div class="row" style="padding:50px 0px 30px 0px">
 				<div class="col-md-3">
-					<button style="width:100%" class="btn btn-danger">确认下单</button>
+					<a href="<%=request.getContextPath() %>/OrderSubmitControl" style="width:100%" class="btn btn-danger">确认下单</a>
 				</div>
 			</div>
 		</div>

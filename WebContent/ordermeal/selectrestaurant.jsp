@@ -18,7 +18,7 @@
 		<ul class="nav navbar-nav">
 			<li class="navbar-head" style="margin-right:30px;"/><a href="<%=request.getContextPath() %>/index.jsp" style="background-image: url('<%=request.getContextPath() %>/images/newlogo.png');width: 250px;height: 48px;"></a></li>
 			<li class="active"><a href="">首页</a></li>
-			<li><a href="">我的订单</a></li>
+			<li><a href="<%=request.getContextPath() %>/student/myorder.jsp">我的订单</a></li>
 			<li><a href="">购物车</a></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
